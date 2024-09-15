@@ -1,0 +1,32 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+{{#if isValid}}
+  <div>
+    <h1 style="text-align: center; margin: 10px 0; padding-bottom: 20px;">Detalle de Producto:</h1>
+    <div style="width: 100%; text-align: center; padding-top: 15px; padding-bottom: 15px;">
+      <button onclick="goToCart()" style="border: 0; border-radius: 4px; background-color: #7066e0; color: #ffffff; font-size: 1em; padding: .625em 1.1em; cursor: pointer">Ir A Carrito</button>
+    </div>
+    <ul style="border: 1px solid #a0a0a0; padding-top: 15px; padding-bottom: 15px; border-radius: 8px; position: relative; margin-top: 10px; margin-bottom: 10px;">
+      <li style="margin: 0px">ID: <strong style="color: red">{{_id}}</strong></li>
+      <li style="margin: 0px">Título: <strong>{{name}}</strong></li>
+      <li style="margin: 0px">Descripción: {{description}}</li>
+      <li style="margin: 0px">Código: {{code}}</li>
+      <li style="margin: 0px">Precio: <strong>${{price}}</strong></li>
+      <li style="margin: 0px">Status: {{#if status}}<strong>Activo</strong>{{else}}Inactivo{{/if}}</li>
+      <li style="margin: 0px">Stock: {{stock}}</li>
+      <li style="margin: 0px">Categoría: <strong>{{category}}</strong></li>
+
+
+      <div style="position: absolute; top: 50%; right: 0; transform: translate(-50%, -50%); width: min-content;">
+        <button type="button" onclick="handleAddProduct('{{_id}}')"  style="border: 0; border-radius: 4px; background-color: #279033; color: #ffffff; font-size: 1em; padding: .625em 1.1em; cursor: pointer; margin-bottom: 10px; min-width: 100px">Agregar</button>
+      </div>              
+    </ul>
+    <div style="width: 100%; text-align: center; margin: 30px 0">
+      <button type="button" onclick="goToProducts()"  style="border: 0; border-radius: 4px; background-color: #aab1e1a1; color: #ffffff; font-size: 1em; padding: .625em 1.1em; cursor: pointer; margin-bottom: 10px; min-width: 100px">Volver</button>
+    </div>
+  </div>
+{{else}}
+  <p>Ha ocurrido un error en mostrar el producto..</p>
+{{/if}}
+
+<script src="/js/productList.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

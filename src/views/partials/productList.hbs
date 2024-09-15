@@ -1,0 +1,101 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<div>
+  <h1 style="text-align: center; margin: 10px 0">Lista de Productos:</h1>
+  <h4 style="text-align: center; margin: 5px 0">Cantidad actual: <span id="productQuantity">{{this.totalDocs}}</span></h4>
+  <div style="width: 100%; text-align: center; padding-top: 15px; padding-bottom: 15px;">
+    <button onclick="goToCart()" style="border: 0; border-radius: 4px; background-color: #7066e0; color: #ffffff; font-size: 1em; padding: .625em 1.1em; cursor: pointer">Ir A Carrito</button>
+  </div>
+  {{#unless error}}
+    <form action="/views/products" method="GET" id="productForm" style="margin: 30px 0; ">
+      <div style="margin-bottom: 20px">
+        <label for="stock">Stock:</label>
+        <select id="stock" name="stock">
+          <option value="" selected>Todos</option>
+          <option value="true">Con Stock</option>
+          <option value="false">Sin Stock</option>
+        </select>
+
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+          <option value="" selected>Todos</option>
+          <option value="true">Habilitados</option>
+          <option value="false">Desactivados</option>
+        </select>
+
+        <label for="limit">Resultados por pagina:</label>
+        <select id="limit" name="limit">
+          <option value="2">2</option>
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="15">15</option>
+        </select>
+
+        <label for="sort">Ordenar por precio:</label>
+        <select id="sort" name="sort">
+          <option value="">Sin Selección</option>
+          <option value="asc">Menor Precio</option>
+          <option value="desc">Mayor Precio</option>
+        </select>
+      </div>
+      <div>
+        <label for="description">Nombre:</label>
+        <input type="text" id="name" name="name" placeholder="Enter description" value="{{selectedName}}" />
+
+        <label for="code">Código:</label>
+        <input type="text" id="code" name="code" placeholder="Enter description" value="{{selectedCode}}" />
+
+        <button type="submit">Filter</button>
+        <button type="button" onclick="clearForm()">Clear</button>
+      </div>
+    </form>
+
+    <div id="productList">
+      {{#if this.docs.length}}
+        {{#each this.docs}}
+          <ul style="border: 1px solid #a0a0a0; padding-top: 15px; padding-bottom: 15px; border-radius: 8px; position: relative; margin-top: 10px; margin-bottom: 10px;">
+            <li style="margin: 0px">Título: <strong>{{name}}</strong></li>
+            <li style="margin: 0px">Código: {{code}}</li>
+            <li style="margin: 0px">Precio: <strong>${{price}}</strong></li>
+            <li style="margin: 0px">Stock: {{stock}}</li>
+
+            {{#if ../actionsButtons}}
+              <div style="position: absolute; top: 50%; right: 0; transform: translate(-10%, -50%); width: min-content;">
+                <button type="button" onclick="handleAddProduct('{{id}}')"  style="border: 0; border-radius: 4px; background-color: #279033; color: #ffffff; font-size: 1em; padding: .625em 1.1em; cursor: pointer; margin-bottom: 10px; min-width: 100px">Agregar</button>
+                <button type="button" onclick="goToProductDetail('{{id}}')"  style="border: 0; border-radius: 4px; background-color: #5340b3; color: #ffffff; font-size: 1em; padding: .625em 1.1em; cursor: pointer; min-width: 100px">Detalle</button>
+            {{/if}}
+              </div>              
+          </ul>
+        {{/each}}
+        <div style="width: 100%; text-align: center; margin-top: 30px; margin-bottom: 10px;">
+          {{#if hasPrevPage}}
+            <a href={{this.prevLink}}><< Anterior</a>
+          {{else}}
+            <a href='' style="pointer-events: none; cursor: not-allowed; opacity: 0.5;"><< Anterior</a>
+          {{/if}}
+          &nbsp;
+            {{#each this.pages}}
+              &nbsp;
+              {{#if current}}
+                <a href='' style="pointer-events: none; cursor: not-allowed; opacity: 0.5; text-decoration: none;">{{page}}</a>
+              {{else}}
+                <a href="" style="pointer-events: none; cursor: not-allowed">{{page}}</a>  
+              {{/if}}           
+            {{/each}}
+          &nbsp;
+          {{#if hasNextPage}}
+            <a href={{this.nextLink}}>Siguiente >></a>
+          {{else}}
+            <a href='' style="pointer-events: none; cursor: not-allowed; opacity: 0.5;">Siguiente >></a>
+          {{/if}}
+        </div>
+      {{else}}
+        <p>No hay productos disponibles...</p>
+      {{/if}}
+    </div>
+  {{else}}
+    <p>Ha ocurrido un error en mostrar la lista...</p>
+  {{/unless}}
+</div>
+
+<script src="/js/productList.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

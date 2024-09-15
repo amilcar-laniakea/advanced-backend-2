@@ -1,0 +1,328 @@
+{
+  "info": {
+    "_postman_id": "27c2dafa-a63e-4677-bfec-89bbc3ad2cac",
+    "name": "CoderHouse Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9537182"
+  },
+  "item": [
+    {
+      "name": "products",
+      "item": [
+        {
+          "name": "Get Products (All) => /api/product",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/product?sort=asc",
+              "host": ["{{url}}"],
+              "path": ["api", "product"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "3",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "Awesome Rubber Mouse",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "stock",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "name",
+                  "value": "Awesome",
+                  "disabled": true
+                },
+                {
+                  "key": "code",
+                  "value": "632",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "asc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products (id/code) => /api/product/:id/code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/product/6693261ab04352892ecd1efd",
+              "host": ["{{url}}"],
+              "path": ["api", "product", "6693261ab04352892ecd1efd"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Product => /api/product",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"{{$randomProductName}}\",\r\n    \"description\": \"{{$randomJobDescriptor}}\",\r\n    \"category\": \"{{$randomProductName}}\",\r\n    \"code\": {{$randomInt}},\r\n    \"price\": {{$randomInt}},\r\n    \"stock\": {{$randomInt}}\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/product",
+              "host": ["{{url}}"],
+              "path": ["api", "product"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Edit Product => /api/product/:id",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"{{$randomProductName}}\",\r\n    \"description\": \"{{$randomJobDescriptor}}\",\r\n    \"price\": {{$randomInt}},\r\n    \"code\": {{$randomInt}},\r\n    \"status\": {{$randomBoolean}},\r\n    \"stock\": {{$randomInt}},\r\n    \"category\": \"{{$randomProductName}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/product/66932619b04352892ecd1ef9",
+              "host": ["{{url}}"],
+              "path": ["api", "product", "66932619b04352892ecd1ef9"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Products => /api/product/:id/code",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/product/66932618b04352892ecd1ef7",
+              "host": ["{{url}}"],
+              "path": ["api", "product", "66932618b04352892ecd1ef7"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "carts",
+      "item": [
+        {
+          "name": "Get Carts (All) => /api/cart",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/cart",
+              "host": ["{{url}}"],
+              "path": ["api", "cart"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Cart (id) => /api/cart/:id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/cart/66bc0e4b725c7f90ad23a9ac",
+              "host": ["{{url}}"],
+              "path": ["api", "cart", "66bc0e4b725c7f90ad23a9ac"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate New Cart => /api/cart",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/cart",
+              "host": ["{{url}}"],
+              "path": ["api", "cart"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AddProductCart => /api/cart/:cid/product/:pid",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"quantity\": 1,\r\n    \"isReduceQuantity\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/cart/66bbec05d1440ce7140255f1/product/6693261ab04352892ecd1efd",
+              "host": ["{{url}}"],
+              "path": [
+                "api",
+                "cart",
+                "66bbec05d1440ce7140255f1",
+                "product",
+                "6693261ab04352892ecd1efd"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteCartProduct => /api/cart/:cid/product/:pid",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/cart/66bbec05d1440ce7140255f1/product/6693261ab04352892ecd1efd",
+              "host": ["{{url}}"],
+              "path": [
+                "api",
+                "cart",
+                "66bbec05d1440ce7140255f1",
+                "product",
+                "6693261ab04352892ecd1efd"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteCart => /api/cart/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/cart/66bbec08d1440ce7140255f9",
+              "host": ["{{url}}"],
+              "path": ["api", "cart", "66bbec08d1440ce7140255f9"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "Login Users =>/api/session/login",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "cookie_auth",
+                "value": "true",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"arkhalu@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/session/login",
+              "host": ["{{url}}"],
+              "path": ["api", "session", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register Users => /api/session/register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "cookie_auth",
+                "value": "true",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"first_name\": \"Am\",\r\n    \"last_name\": \"Bs\",\r\n    \"email\": \"elite@gmail.com\",\r\n    \"password\": \"654321\",\r\n    \"age\": 19\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/session/register",
+              "host": ["{{url}}"],
+              "path": ["api", "session", "register"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Main Static Home",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:8080",
+          "host": ["localhost"],
+          "port": "8080"
+        }
+      },
+      "response": []
+    }
+  ]
+}

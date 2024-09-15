@@ -1,0 +1,12 @@
+# App libraries
+node_modules
+
+# App files
+api/data/
+
+# Vercel Deployment
+.vercel
+
+# .env file
+*.env
+*.env.local

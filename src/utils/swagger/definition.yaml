@@ -1,0 +1,216 @@
+openapi: 3.0.0
+info:
+  title: API Rest Backend Demo
+  version: 1.1.0
+  description: Application to manage products and and cart, with persistence of the data in a database with mondoDB, for now, it is only a two (2) endpoints located in the /api/product path, which are GET methods, one to get a list of products and the other to get a single product by id.
+servers:
+  - url: http://localhost:8080
+  - url: https://backend-final-project.amilcarcode.app
+paths:
+  /api/product:
+    get:
+      tags:
+        - Products
+      summary: Retrieves a list of products paginated.
+      description: Returns all requested products paginated, and with the desired filter params setting in the request.
+      parameters:
+        - name: sort
+          in: query
+          description: Sort order of the products
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+        - name: limit
+          in: query
+          description: Quantity of products to retrieve
+          required: false
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: Page number to retrieve
+          required: false
+          schema:
+            type: integer
+        - name: name
+          in: query
+          description: Filter products by name
+          required: false
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Filter products by category
+          required: false
+          schema:
+            type: string
+        - name: stock
+          in: query
+          description: Filter products by stock
+          required: false
+          schema:
+            type: boolean
+        - name: status
+          in: query
+          description: Filter products by status
+          required: false
+          schema:
+            type: boolean
+        - name: code
+          in: query
+          description: Filter products by code
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Retrieves a list of products with pagination details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductListResponse"
+        "404":
+          description: Response if not product is found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductListErrorResponse"
+  /api/product/{id}:
+    get:
+      tags:
+        - Products
+      summary: Retrieves a specific product by id.
+      description: Returns a single product by id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the product to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Retrieves a single product.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductResponse"
+        "400":
+          description: Incorrect ID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductErrorResponse"
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductErrorResponse"
+  # Add more paths here...
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        code:
+          type: integer
+        status:
+          type: boolean
+        stock:
+          type: integer
+        category:
+          type: string
+        thumbnail:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+    ProductListResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            docs:
+              type: array
+              items:
+                $ref: "#/components/schemas/Product"
+            totalDocs:
+              type: integer
+            limit:
+              type: integer
+            totalPages:
+              type: integer
+            page:
+              type: integer
+            pagingCounter:
+              type: integer
+            hasPrevPage:
+              type: boolean
+            hasNextPage:
+              type: boolean
+            prevPage:
+              type: integer
+              nullable: true
+            nextPage:
+              type: integer
+        message:
+          type: string
+          nullable: true
+    ProductResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/Product"
+        message:
+          type: string
+    ProductListErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        success:
+          type: boolean
+        data:
+          type: object
+          nullable: true
+        message:
+          type: string
+    ProductErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        success:
+          type: boolean
+        data:
+          type: object
+          nullable: true
+        message:
+          type: string
