@@ -10,6 +10,7 @@ export const userErrorCodes = {
   ERROR_UNEXPECTED: "unexpected error",
   ERROR_REGISTER: "Error registering user",
   ERROR_CREDENTIALS: "Invalid credentials",
+  ERROR_INCONSISTENT_ROLE: "Inconsistent role",
 };
 
 export const userSuccessCodes = {

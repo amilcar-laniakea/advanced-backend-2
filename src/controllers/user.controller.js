@@ -168,7 +168,36 @@ class UserController {
   async currentUser(req, res) {
     try {
       const { user } = req;
-      return Response(res, user);
+
+      const userData = await getUser(user.email);
+
+      if (!userData) {
+        return Response(res, null, userErrorCodes.ERROR_NOT_FOUND, 404, false);
+      }
+
+      if (user.role !== userData.role) {
+        return Response(
+          res,
+          null,
+          userErrorCodes.ERROR_INCONSISTENT_ROLE,
+          401,
+          false
+        );
+      }
+
+      const userResponse = {
+        id: userData._id,
+        first_name: userData.first_name,
+        last_name: userData.last_name,
+        email: userData.email,
+        age: userData.age,
+        role: userData.role,
+        cart_id: userData.cart_id,
+        created_at: userData.createdAt,
+        updated_at: userData.updatedAt,
+      };
+
+      return Response(res, userResponse);
     } catch (error) {
       return Response(res, null, error.message, 500, false);
     }

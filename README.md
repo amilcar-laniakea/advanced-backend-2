@@ -1,4 +1,4 @@
-# Aplicación Backend E-Commerce:  **Backend Avanzado II**
+# Aplicación Backend E-Commerce: **Backend Avanzado II**
 
 (ultima actualización: => 15/09/2024)
 
@@ -8,9 +8,8 @@ El proyecto se estructuro de forma que pudiera mostrar una modularidad fácilmen
 
 Proyecto hecho con conexión a una base de datos no-relacional basada en la arquitectura de mongoDB.
 
-> [!IMPORTANT]
-> `Actualización 15/09/2024:` para realizar un test de la funcionalidad de cookies, la cual fue implementada de de forma `opcional`, revisar toda la información necesaria para probar y entender su uso se ir a la seccion de `uso => endpoints de la api => rutas de usuarios`, allí se encontraran 2 avisos importantes de como usarlo por medio de `postman`
- 
+> [!IMPORTANT] > `Actualización 15/09/2024:` para realizar un test de la funcionalidad de cookies, la cual fue implementada de de forma `opcional`, revisar toda la información necesaria para probar y entender su uso se ir a la seccion de `uso => endpoints de la api => rutas de usuarios`, allí se encontraran 2 avisos importantes de como usarlo por medio de `postman`
+
 ## Tabla de Contenidos
 
 1. [Instalación](#instalación)
@@ -241,7 +240,7 @@ De igual forma el parámetro `isReduceQuantity` (opcional) es usado para aumenta
 > [!IMPORTANT]
 > Lo anterior se realizo para cumplir con el requerimiento de la `pre-entrega numero 1` del curso.
 
-**GET** `/api/session/current`: Obtiene la información del usuario por medio del JWT y su tipo de rol por medio de dos (2) middlewares; si el token no es valido o el usuario que intenta acceder no es de tipo `user`, se obtendrá ua respuesta de tipo `no autorizado`.  
+**GET** `/api/session/current`: Obtiene la información del usuario por medio del JWT y su tipo de rol por medio de dos (2) middlewares; si el token no es valido o el usuario que intenta acceder no es de tipo `user`, se obtendrá ua respuesta de tipo `no autorizado`.
 
 **POST** `/api/session/login`: Inicia sesión del usuario, los campos requeridos son `email => con su email correspondiente` y `password => con la clave que uso al momento del registro`
 
@@ -328,7 +327,7 @@ Existe un archivo en la carpeta `src/config/db.js` el cual tiene la configuraci�
          `${process.env.MONGO_DB_URI}${process.env.DATABASE_NAME}`,
          {}
       );
-      console.log("success: connected to database!");
+      Log("success: connected to database!");
    } catch (error) {
       console.error("error:", error.message);
       process.exit(1);
@@ -336,7 +335,7 @@ Existe un archivo en la carpeta `src/config/db.js` el cual tiene la configuraci�
    };
 
    const dbError = db.on("error", (err) => {
-   console.log(err);
+   Log(err);
    });
 
    module.exports = { dbConnect, dbError };

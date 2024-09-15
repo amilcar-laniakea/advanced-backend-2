@@ -3,8 +3,6 @@ import { exceptionErrors } from "../../constants/general.constants.js";
 
 export const authenticateRole = (role) => {
   return async (req, res, next) => {
-    console.log("req.user", req.user);
-    console.log("role", role);
     if (!req.user)
       return Response(
         res,
