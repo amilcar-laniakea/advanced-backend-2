@@ -2,7 +2,19 @@
 
 Changes Made to the repository its initial commit.
 
-------------------------------------------------------------------------------------------------------------------
+---
+
+## [1.4.1] Cookie user implementation, home customization (16/09/24)
+
+- Deleted in passport configuration unnecessary functions
+- Added APP_NAME and SWAGGER_PATH environment variables
+- Adjusted minor code files for improve readability
+
+### Bug Fixes
+
+---
+
+---
 
 ## [1.4.0] Cookie user implementation, home customization (15/09/24)
 
@@ -14,9 +26,9 @@ Changes Made to the repository its initial commit.
 
 ### Bug Fixes
 
-***
+---
 
-------------------------------------------------------------------------------------------------------------------
+---
 
 ## [1.3.0] Implemented user register, login and protected route /current (14/09/24)
 
@@ -29,9 +41,9 @@ Changes Made to the repository its initial commit.
 
 ### Bug Fixes
 
-***
+---
 
--------------------------------------------------------------------------------------------------------------------
+---
 
 ## [1.2.0] Features for prepare arriving user CRUD (13/09/24)
 
@@ -45,9 +57,9 @@ Changes Made to the repository its initial commit.
 
 ### Bug Fixes
 
-***
+---
 
--------------------------------------------------------------------------------------------------------------------
+---
 
 ## [1.1.0] Reconnect feature database (12/09/24)
 
@@ -56,17 +68,17 @@ Changes Made to the repository its initial commit.
 
 ### Bug Fixes
 
-***
+---
 
--------------------------------------------------------------------------------------------------------------------
+---
 
 ## [1.0.0] Refactor project to type => Module (14/07/24)
 
 - Fist commit (fork) and refactor fom common module to type module.
-- Implemented function getRoute, to emulate functionality to native commonjs type "__dirname"
+- Implemented function getRoute, to emulate functionality to native commonjs type "\_\_dirname"
 
 ### Bug Fixes
 
-***
+---
 
--------------------------------------------------------------------------------------------------------------------
+---

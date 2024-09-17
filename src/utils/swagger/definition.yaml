@@ -4,8 +4,7 @@ info:
   version: 1.1.0
   description: Application to manage products and and cart, with persistence of the data in a database with mondoDB, for now, it is only a two (2) endpoints located in the /api/product path, which are GET methods, one to get a list of products and the other to get a single product by id.
 servers:
-  - url: http://localhost:8080
-  - url: https://backend-final-project.amilcarcode.app
+  - url:
 paths:
   /api/product:
     get:
