@@ -5,20 +5,14 @@ import fs from "fs";
 import path from "path";
 import { Log } from "../log.js";
 import { getRoute } from "../get-route.js";
-import { nodeEnv } from "../../config/env.js";
+import { swaggerPath } from "../../config/env.js";
 
 const __dirname = getRoute(import.meta.url);
 
 const definitionPath = path.resolve(__dirname, "./definition.yaml");
 const definition = yaml.load(fs.readFileSync(definitionPath, "utf8"));
 
-if (nodeEnv === "production") {
-  definition.servers = [
-    { url: "https://backend-final-project.amilcarcode.app" },
-  ];
-} else {
-  definition.servers = [{ url: "http://localhost:8080" }];
-}
+definition.servers = [{ url: swaggerPath }];
 
 const options = {
   definition,

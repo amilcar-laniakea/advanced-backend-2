@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
 import { Log } from "../utils/log.js";
-import { dbMaxRetries, dbRetryDelay, dbMongoURI, dbName } from "./env.js";
+import {
+  dbMaxRetries,
+  dbRetryDelay,
+  dbMongoURI,
+  dbName,
+  appName,
+} from "./env.js";
 
 const db = mongoose.connection;
 
@@ -16,7 +22,7 @@ export const dbConnect = async () => {
     await mongoose.connect(`${dbMongoURI}${dbName}`, {
       retryWrites: true,
       w: "majority",
-      appName: "Cluster0",
+      appName,
     });
     Log.info("success: connected to database!");
   } catch (error) {

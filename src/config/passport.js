@@ -1,6 +1,5 @@
 import passport from "passport";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import userService from "../models/user.model.js";
 import { appSecret } from "./env.js";
 
 const customExtractor = (req) => {
@@ -25,13 +24,4 @@ export const initializePassport = () => {
       }
     })
   );
-
-  passport.serializeUser((user, done) => {
-    done(null, user._id);
-  });
-
-  passport.deserializeUser(async (id, done) => {
-    let user = await userService.findById(id);
-    done(null, user);
-  });
 };
