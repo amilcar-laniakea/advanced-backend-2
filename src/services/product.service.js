@@ -3,7 +3,7 @@ import { isValidObjectId } from "../utils/is-valid-object-id.js";
 import { productErrorCodes } from "../constants/product.constants.js";
 import { isBooleanString } from "../utils/is-boolean-string.js";
 
-export const getAllProducts = async (
+export const serviceGetProducts = async (
   page,
   limit,
   category,
@@ -43,7 +43,7 @@ export const getAllProducts = async (
   return products;
 };
 
-export const getProductById = async (id) => {
+export const serviceGetProduct = async (id) => {
   if (!isValidObjectId(id) && isNaN(Number(id)))
     throw new Error(productErrorCodes.INVALID_FORMAT);
 
@@ -56,7 +56,7 @@ export const getProductById = async (id) => {
   return product;
 };
 
-export const createProduct = async (data) => {
+export const serviceCreateProduct = async (data) => {
   const productRequest = new Product(data);
   const product = await productRequest.save();
 
@@ -67,7 +67,7 @@ export const createProduct = async (data) => {
   return product;
 };
 
-export const updateProduct = async (id, data) => {
+export const serviceUpdateProduct = async (id, data) => {
   const product = await Product.findByIdAndUpdate(id, data);
 
   if (!product) {
@@ -77,14 +77,27 @@ export const updateProduct = async (id, data) => {
   return product;
 };
 
-export const deleteProduct = async (id) => {
+export const serviceDeleteProduct = async (id) => {
   if (!isValidObjectId(id) && isNaN(Number(id))) {
     throw new Error(productErrorCodes.INVALID_FORMAT);
   }
 
-  const product = await (!isNaN(id)
-    ? Product.deleteOne({ code: id })
-    : Product.findByIdAndDelete(id));
+  const handleDeleteProduct = async (id) => {
+    if (isNaN(id)) {
+      return await Product.findByIdAndDelete(id);
+    } else {
+      const product = await Product.deleteOne({ code: id });
+
+      if (product.deletedCount === 0) {
+        return null;
+      }
+      return product;
+    }
+  };
+
+  const product = await handleDeleteProduct(id);
+
+  console.log(product);
 
   if (!product) {
     throw new Error(productErrorCodes.NOT_FOUND);

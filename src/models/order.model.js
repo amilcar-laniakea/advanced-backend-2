@@ -1,19 +1,17 @@
 import { Schema, model } from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
-const cartSchema = new Schema(
+const orderSchema = new Schema(
   {
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+    code: {
+      type: Number,
       index: true,
       required: true,
       unique: true,
     },
-    status: {
-      type: Boolean,
+    amount: {
+      type: Number,
       required: true,
-      default: true,
     },
     products: [
       {
@@ -26,17 +24,20 @@ const cartSchema = new Schema(
         },
       },
     ],
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-cartSchema.index({ user: 1 }, { unique: true });
+orderSchema.plugin(mongoosePaginate);
 
-cartSchema.plugin(mongoosePaginate);
+const orderModel = "Order";
+const orderCollection = "orders";
 
-const cartModel = "Cart";
-const cartCollection = "carts";
+const Order = model(orderModel, orderSchema, orderCollection);
 
-const Cart = model(cartModel, cartSchema, cartCollection);
-
-export default Cart;
+export default Order;

@@ -13,7 +13,7 @@ import { dbConnect, dbError } from "./config/db.js";
 import usersRouter from "./routes/user.router.js";
 import productsRouter from "./routes/product.router.js";
 import cartsRouter from "./routes/cart.router.js";
-import staticRouter from "./routes/static.router.js";
+import ordersRouter from "./routes/order.router.js";
 
 const PORT = appPort || 8080;
 const __dirname = getRoute(import.meta.url);
@@ -39,7 +39,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use("/api/session", usersRouter);
 app.use("/api/product", productsRouter);
 app.use("/api/cart", cartsRouter);
-app.use("/views", staticRouter);
+app.use("/api/order", ordersRouter);
 
 swaggerDocs(app, PORT, __dirname);
 

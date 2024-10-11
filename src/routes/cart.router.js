@@ -1,24 +1,59 @@
-import express from "express";
-import CartActions from "../controllers/cart.controller.js";
+import { Router } from "express";
+import { authenticateJwt } from "../utils/middlewares/authenticate-jwt.middleware.js";
+import { authenticateRole } from "../utils/middlewares/authenticate-role.middleware.js";
+import {
+  getCarts,
+  getCart,
+  createCart,
+  addCartProduct,
+  deleteCartProduct,
+  deleteCart,
+  purchaseCart,
+} from "../controllers/cart.controller.js";
 
-const router = express.Router();
-const Cart = new CartActions();
+const router = Router();
 
-router.get("/", async (req, res) => Cart.getCarts(req, res));
-router.get("/:id", async (req, res) => Cart.getCartById(res, req.params.id));
-router.post("/", (_, res) => Cart.createCart(res));
-router.post("/:cid/product/:pid", async (req, res) =>
-  Cart.addCartProduct(
-    res,
-    req.params.cid,
-    req.params.pid,
-    req.body?.quantity,
-    req.body.isReduceQuantity
-  )
+router.get(
+  "/", 
+  authenticateJwt(),
+  authenticateRole("admin"),
+  getCarts
 );
-router.delete("/:cid/product/:pid", async (req, res) =>
-  Cart.deleteCartProduct(res, req.params.cid, req.params.pid)
+router.get(
+  "/:id", 
+  authenticateJwt(),
+  authenticateRole("admin"),
+  getCart,
+
 );
-router.delete("/:id", (req, res) => Cart.deleteCart(res, req.params.id));
+router.post(
+  "/", 
+  authenticateJwt(), 
+  authenticateRole("user"),
+  createCart
+);
+router.post(
+  "/:cid/product/:pid",
+  authenticateJwt(),
+  authenticateRole("user"),
+  addCartProduct
+);
+router.delete(
+  "/:cid/product/:pid",
+  authenticateJwt(),
+  authenticateRole("user"),
+  deleteCartProduct
+);
+router.delete(
+  "/:id",
+  authenticateJwt(), 
+  authenticateRole("admin"),
+  deleteCart
+);
+router.post(
+  "/:id/purchase", 
+  authenticateJwt(), 
+  authenticateRole("user"), 
+  purchaseCart);
 
 export default router;
