@@ -4,6 +4,36 @@ Changes Made to the repository its initial commit.
 
 ---
 
+## [1.6.0] Email and template response for purchaseService implementation (11/10/24)
+
+- Added email implementation to send an email when a purchase is completed
+- Added temporally a template inside of method cartPurchase
+- Added only a DTO in products to validate data
+- Added complete mechanic JWT and auth role from missed endpoints line as list carts and cart delete
+- Deleted static views
+- Preserved statics views folder and elements for further advanced implementation of email templates.
+
+### Bug for Fox:
+
+---
+
+- DTO's in cart and users modules was not implemented because a mongoDB id problem (checking for a bugfix)
+
+---
+
+## [1.5.0] Cart purchase implementation, Orders module implementation (10/10/24)
+
+- Added service, controller and route for purchaseCart method, this method process the cart, reduce stock
+- Added services, controller and routes, for methods getOrders and getOrder (by ID)
+- Adjusted minor code files for improve readability
+- Added in all necessary services the middlewares of JWT auth and user role
+
+### Bug Fixes
+
+---
+
+---
+
 ## [1.4.1] Cookie user implementation, home customization (16/09/24)
 
 - Deleted in passport configuration unnecessary functions

@@ -8,8 +8,6 @@ El proyecto se estructuro de forma que pudiera mostrar una modularidad fácilmen
 
 Proyecto hecho con conexión a una base de datos no-relacional basada en la arquitectura de mongoDB.
 
-> [!IMPORTANT] > `Actualización 15/09/2024:` para realizar un test de la funcionalidad de cookies, la cual fue implementada de de forma `opcional`, revisar toda la información necesaria para probar y entender su uso se ir a la seccion de `uso => endpoints de la api => rutas de usuarios`, allí se encontraran 2 avisos importantes de como usarlo por medio de `postman`
-
 ## Tabla de Contenidos
 
 1. [Instalación](#instalación)
@@ -80,6 +78,8 @@ Actualmente solo están disponibles los endpoints para listar los productos y el
 ## Uso
 
 ### Iniciar Aplicación
+
+> [!IMPORTANT] > `Actualización 15/09/2024:` para realizar un test de la funcionalidad de cookies, la cual fue implementada de de forma `opcional`, revisar toda la información necesaria para probar y entender su uso se ir a la seccion de `uso => endpoints de la api => rutas de usuarios`, allí se encontraran 2 avisos importantes de como usarlo por medio de `postman`
 
 ```sh
    npm run start
@@ -219,6 +219,8 @@ Nótese los atributos comunes a la respuesta: `status` indica el código de la r
 El parámetro `quantity` (opcional) debe ser enviado de la siguiente manera (ejemplo por Postman), en caso de no ser enviado, por default se agrega un `1` solo producto:
 De igual forma el parámetro `isReduceQuantity` (opcional) es usado para aumentar si esta en `true` y disminuir si esta en `false` la cantidad de productos del carrito, si no es enviado por default la aplicación lo toma como un true.
 
+**POST** `/api/cart/:id/purchase/`: Este servicio tiene como principal funcion procesar el carrito de compras del usuario, el mismo verifica si efectivamente el usuario que intenta procesar el carrito es propietario del mismo y procesa la compra, recudiendo la cantidad en los productos con suficiente stock e ignorando aquellos con stick no suficientes, estos mismo, quedaran en el carrito de compras una vez finalizado el proceso, luego del proceso exitoso es enviado un email de confirmación al usuario objetivo.
+
 > [!IMPORTANT]
 > El parámetro `isReduceQuantity` es sensible y detecta la disponibilidad del stock al producto agregado, si no existe suficiente stock al momento de agregar, o al momento de disminuir mostrara un mensaje de `no hay stock disponible`
 
@@ -267,54 +269,22 @@ De igual forma el parámetro `isReduceQuantity` (opcional) es usado para aumenta
 
 La implementación del `registro` y `login` de usuario hacen el uso de las herramientas `passport` para el método de registro e inicio de sesión, `jwt` para devolver la información del usuario por medio de un token y `bcryptjs` para encriptar el password del usuario para ser guardado en la base de datos.
 
-#### Rutas estáticas:
+#### Rutas de Ordenes:
 
-> [!IMPORTANT]
-> Estas rutas son para demostración de renderizado de contenido del lado der servidor para ser servido por frontend, los archivos clave de estas rutas exclusivas se encuentran en el archivo `src/routes/static.router.js` y sus métodos en `src/controllers/static.controller.js` de formas de ser abstraídas o quitadas con facilidad en el momento de no necesitarse mas como forma de hacer el proyecto mas escalable a largo plazo.
+**GET** `/api/order`: Obtiene la lista de ordenes. Puede enviarse como parámetros opcionales `limit, page, code y sort` todo esto con el fin de poder hacer un filtrado avanzado en el servicio y posteriormente obtener los resultados.  
+**GET** `/api/order/:id`: Obtiene una orden con el id requerido por parámetro en ruta.
 
-> [!NOTE]
-> Cada vista presenta en su mecánica un archivo JS vinculado a su lógica ubicado en la ruta `src/public/js`
+#### Rutas de Email:
 
-Son las rutas usadas para renderizar del lado del servidor contenido que pueda ser visualizado y manipulado por el cliente, estas vistas permiten mostrar los productos que son devueltos anteriormente por el endpoint `/api/products` de forma gráfica.
+**POST** `/api/email/`: Endpoint prueba del servicio de email
 
-$${\color{green}Rutas \space Estáticas:}$$
-
-$${\color{lightgreen}/views/products:}$$
-
-Esta muestra los productos que son consultados a la base de datos de mongoDB y los muestra sin ningún ordenamiento, de forma paginada y por default como limite de elementos un total de `20`, sin embargo como se muestra en la imagen, existen una serie de filtros avanzados los cuales pueden aplicarse a la consulta como: `stock, status, resultados por pagina(limit), ordenamiento (sort tipo asc y des) en relación a precio, búsqueda por nombre y por código, de igual forma en endpoint esta preparado para buscar por categorías, los cuales no se incluyeron en la demostración de este frontend (revisar colección de postman ubicada en la raíz del proyecto (postman))`.
-
-> [!IMPORTANT]
-> Existen 2 botones como acciones principales en cada producto renderizado, uno redirige a la vista de `/views/product-detail/:pid` y el otro realiza la funcionalidad de agregar un producto al carro de compra, cabe destacar que al momento de realizar esta acción se verifica si existe un id de carro de compras almacenado en `localStorage` de no ser asi, este consulta el servicio de generar carro de compras y posteriormente agrega el producto al mismo, en caso contrario de existir el id del carrito, solo es obtenido y usado por la funcion de agregar producto..
-
-Como ultimo acción, se ubica el botón `Ir Al Carrito` el cual lleva a la vista `views/cart`
-
-<p align="center">
-   <image src="external_resources/images/productList.jpg" alt="Descripción de la imagen">
-</p>
-
-La estructura de información mostrada es la misma que la devuelta por el endpoint **GET** `api/product`
-
-$${\color{lightgreen}/views/product-detail/:id:}$$
-
-Esta vista muestra a mas detalle mas información procedente del servicio `api/product/:pid` que no es mostrada en la lista anteriormente descrita, de igual manera, se muestra un botón de acción ya que en esta vista es posible de igual manera agregar un producto al carro de compras obteniendo el `cid` de localStorage como de menciono con anterioridad.
-
-El botón `Ir Al Carrito` se encuentra disponible en esta vista al igual que en la lista de productos.
-
-<p align="center">
-   <image src="external_resources/images/productDetail.jpg" alt="Descripción de la imagen">
-</p>
-
-$${\color{lightgreen}/views/cart:}$$
-
-Esta vista muestra los productos agregados al carrito del usuario que actualmente esta usando el equipo, esta vista verifica la existencia de un `id` almacenado en localStorage y desde esa verificación hace la consulta al servicio devolviendo solo el carrito correspondiente a ese id almacenado, en caso de no existir la vista mostrara un texto de `no encontrado`
-
-En la vista existe por producto un botón de `eliminar` el cual elimina el producto elegido del carrito de compras, como dato adicional, en la vista se muestra el total de productos y precio de los mismos previamente agregados.
-
-Como se explico con anterioridad, a modo de acotación: al momento de agregar un producto es verificado si hay un id almacenado en localStorage como nombre `cart`, de no ser asi es creado por el servicio correspondiente de `generateCart`, en caso de existir es agregado al id recogido desde localStorage.
-
-<p align="center">
-   <image src="external_resources/images/cartProducts.jpg" alt="Descripción de la imagen">
-</p>
+```sh
+   {
+    "emailUser": "arkhalem@gmail.com",
+    "emailSubject": "Email test from Postman APP!!!",
+    "description": "Thanks for testing his email notification at a time..."
+   }
+```
 
 ## Mongodb
 

@@ -1,19 +1,41 @@
-import express from "express";
-import ProductActions from "../controllers/product.controller.js";
+import { Router } from "express";
+import { authenticateJwt } from "../utils/middlewares/authenticate-jwt.middleware.js";
+import { authenticateRole } from "../utils/middlewares/authenticate-role.middleware.js";
+import {
+  getProducts,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "../controllers/product.controller.js";
 
-const router = express.Router();
-const Product = new ProductActions();
+const router = Router();
 
-router.get("/", async (req, res) => Product.getProducts(req, res));
-router.get("/:id", (req, res) =>
-  Product.getProductById(res, String(req.params.id))
+router.get(
+  "/", 
+  getProducts
 );
-router.post("/", (req, res) => Product.createProduct(res, req.body));
-router.put("/:id", async (req, res) =>
-  Product.updateProduct(res, req.params.id, req.body)
+router.get(
+  "/:id", 
+  getProduct
 );
-router.delete("/:id", async (req, res) =>
-  Product.deleteProduct(res, req.params.id)
+router.post(
+  "/", 
+  authenticateJwt(), 
+  authenticateRole("admin"), 
+  createProduct
+);
+router.patch(
+  "/:id",
+  authenticateJwt(),
+  authenticateRole("admin"),
+  updateProduct
+);
+router.delete(
+  "/:id",
+  authenticateJwt(),
+  authenticateRole("admin"),
+  deleteProduct
 );
 
 export default router;

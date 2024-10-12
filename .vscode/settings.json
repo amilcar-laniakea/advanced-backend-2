@@ -32,5 +32,6 @@
     "smoothscroll",
     "Swal",
     "websockets"
-  ]
+  ],
+  "editor.formatOnSave": true
 }

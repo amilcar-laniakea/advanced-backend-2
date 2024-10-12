@@ -15,48 +15,47 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{url}}/api/product?sort=asc",
+              "raw": "{{url}}/api/product?limit=5&page=1",
               "host": ["{{url}}"],
               "path": ["api", "product"],
               "query": [
                 {
                   "key": "limit",
-                  "value": "3",
-                  "disabled": true
+                  "value": "5"
                 },
                 {
                   "key": "page",
-                  "value": "1",
-                  "disabled": true
+                  "value": "1"
                 },
                 {
                   "key": "category",
-                  "value": "Awesome Rubber Mouse",
+                  "value": "Rustic Concrete Table",
                   "disabled": true
                 },
                 {
                   "key": "status",
-                  "value": "true",
+                  "value": "false",
                   "disabled": true
                 },
                 {
                   "key": "stock",
-                  "value": "true",
+                  "value": "false",
                   "disabled": true
                 },
                 {
                   "key": "name",
-                  "value": "Awesome",
+                  "value": "Small",
                   "disabled": true
                 },
                 {
                   "key": "code",
-                  "value": "632",
+                  "value": "437",
                   "disabled": true
                 },
                 {
                   "key": "sort",
-                  "value": "asc"
+                  "value": "asc",
+                  "disabled": true
                 }
               ]
             }
@@ -69,9 +68,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{url}}/api/product/6693261ab04352892ecd1efd",
+              "raw": "{{url}}/api/product/67084e9e99dbeb1643c2b6bb",
               "host": ["{{url}}"],
-              "path": ["api", "product", "6693261ab04352892ecd1efd"]
+              "path": ["api", "product", "67084e9e99dbeb1643c2b6bb"]
             }
           },
           "response": []
@@ -79,6 +78,16 @@
         {
           "name": "Add Product => /api/product",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "POST",
             "header": [],
             "body": {
@@ -101,11 +110,21 @@
         {
           "name": "Edit Product => /api/product/:id",
           "request": {
-            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"{{$randomProductName}}\",\r\n    \"description\": \"{{$randomJobDescriptor}}\",\r\n    \"price\": {{$randomInt}},\r\n    \"code\": {{$randomInt}},\r\n    \"status\": {{$randomBoolean}},\r\n    \"stock\": {{$randomInt}},\r\n    \"category\": \"{{$randomProductName}}\"\r\n}",
+              "raw": "{\r\n    \"name\": \"{{$randomProductName}}\",\r\n    \"description\": \"{{$randomJobDescriptor}}\",\r\n    \"price\": {{$randomInt}},\r\n    \"code\": {{$randomInt}},\r\n    \"status\": {{$randomBoolean}},\r\n    \"stock\": 1,\r\n    \"category\": \"{{$randomProductName}}\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -113,9 +132,9 @@
               }
             },
             "url": {
-              "raw": "{{url}}/api/product/66932619b04352892ecd1ef9",
+              "raw": "{{url}}/api/product/67084e9e99dbeb1643c2b6bb",
               "host": ["{{url}}"],
-              "path": ["api", "product", "66932619b04352892ecd1ef9"]
+              "path": ["api", "product", "67084e9e99dbeb1643c2b6bb"]
             }
           },
           "response": []
@@ -126,9 +145,9 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{url}}/api/product/66932618b04352892ecd1ef7",
+              "raw": "{{url}}/api/product/67084e9c99dbeb1643c2b6b9",
               "host": ["{{url}}"],
-              "path": ["api", "product", "66932618b04352892ecd1ef7"]
+              "path": ["api", "product", "67084e9c99dbeb1643c2b6b9"]
             }
           },
           "response": []
@@ -141,6 +160,16 @@
         {
           "name": "Get Carts (All) => /api/cart",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
@@ -154,12 +183,22 @@
         {
           "name": "Get Cart (id) => /api/cart/:id",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{url}}/api/cart/66bc0e4b725c7f90ad23a9ac",
+              "raw": "{{url}}/api/cart/6708b7246a18bd4ab91ad235",
               "host": ["{{url}}"],
-              "path": ["api", "cart", "66bc0e4b725c7f90ad23a9ac"]
+              "path": ["api", "cart", "6708b7246a18bd4ab91ad235"]
             }
           },
           "response": []
@@ -167,6 +206,16 @@
         {
           "name": "Generate New Cart => /api/cart",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "POST",
             "header": [],
             "url": {
@@ -180,11 +229,21 @@
         {
           "name": "AddProductCart => /api/cart/:cid/product/:pid",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"quantity\": 1,\r\n    \"isReduceQuantity\": true\r\n}",
+              "raw": "{\r\n    \"quantity\": 3,\r\n    \"isReduceQuantity\": false\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -192,14 +251,14 @@
               }
             },
             "url": {
-              "raw": "{{url}}/api/cart/66bbec05d1440ce7140255f1/product/6693261ab04352892ecd1efd",
+              "raw": "{{url}}/api/cart/6709affb2cf463b9de01f2b3/product/67084ea199dbeb1643c2b6c5",
               "host": ["{{url}}"],
               "path": [
                 "api",
                 "cart",
-                "66bbec05d1440ce7140255f1",
+                "6709affb2cf463b9de01f2b3",
                 "product",
-                "6693261ab04352892ecd1efd"
+                "67084ea199dbeb1643c2b6c5"
               ]
             }
           },
@@ -208,17 +267,27 @@
         {
           "name": "DeleteCartProduct => /api/cart/:cid/product/:pid",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{url}}/api/cart/66bbec05d1440ce7140255f1/product/6693261ab04352892ecd1efd",
+              "raw": "{{url}}/api/cart/6708b7246a18bd4ab91ad235/product/67084e9e99dbeb1643c2b6bb",
               "host": ["{{url}}"],
               "path": [
                 "api",
                 "cart",
-                "66bbec05d1440ce7140255f1",
+                "6708b7246a18bd4ab91ad235",
                 "product",
-                "6693261ab04352892ecd1efd"
+                "67084e9e99dbeb1643c2b6bb"
               ]
             }
           },
@@ -233,6 +302,29 @@
               "raw": "{{url}}/api/cart/66bbec08d1440ce7140255f9",
               "host": ["{{url}}"],
               "path": ["api", "cart", "66bbec08d1440ce7140255f9"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CartPurchase=> /api/cart/:cid/purchase",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/cart/6709affb2cf463b9de01f2b3/purchase",
+              "host": ["{{url}}"],
+              "path": ["api", "cart", "6709affb2cf463b9de01f2b3", "purchase"]
             }
           },
           "response": []
@@ -266,7 +358,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"arkhalu@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+              "raw": "/*{\r\n    \"email\": \"super_elite@gmail.com\",\r\n    \"password\": \"0123456789\"\r\n}*/\r\n\r\n{\r\n    \"email\": \"elite@gmail.com\",\r\n    \"password\": \"654321\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -294,7 +386,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"first_name\": \"Am\",\r\n    \"last_name\": \"Bs\",\r\n    \"email\": \"elite@gmail.com\",\r\n    \"password\": \"654321\",\r\n    \"age\": 19\r\n}",
+              "raw": "{\r\n    \"first_name\": \"Jose\",\r\n    \"last_name\": \"Arimatea\",\r\n    \"email\": \"arkhalem@gmail.com\",\r\n    \"password\": \"0123456789\",\r\n    \"age\": 85,\r\n    \"role\": \"user\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -305,6 +397,129 @@
               "raw": "{{url}}/api/session/register",
               "host": ["{{url}}"],
               "path": ["api", "session", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check User Session => {{url}}/api/session/current",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "cookie_auth",
+                "value": "true",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "{{url}}/api/session/current",
+              "host": ["{{url}}"],
+              "path": ["api", "session", "current"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "orders",
+      "item": [
+        {
+          "name": "GetOrders =>  /api/order",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/order?limit=5&page=1",
+              "host": ["{{url}}"],
+              "path": ["api", "order"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "code",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetOrder => /api/order/:id",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/api/order/670960e0af780267b9ebcd63",
+              "host": ["{{url}}"],
+              "path": ["api", "order", "670960e0af780267b9ebcd63"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "emails",
+      "item": [
+        {
+          "name": "SendEmailTest",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"emailUser\": \"arkhalem@gmail.com\",\r\n    \"emailSubject\": \"Email test from Postman APP!!!\",\r\n    \"description\": \"Thanks for testing his email notification at a time...\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/api/email/",
+              "host": ["{{url}}"],
+              "path": ["api", "email", ""]
             }
           },
           "response": []
