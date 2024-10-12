@@ -10,12 +10,12 @@
     },
     {
       "key": "token",
-      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTcxMDM2NGExMmNhOWFiZjQyNDhiNSIsImZpcnN0X25hbWUiOiJKb3NlIiwibGFzdF9uYW1lIjoiQXJpbWF0ZWEiLCJlbWFpbCI6ImFya2hhbHVtQGdtYWlsLmNvbSIsImFnZSI6MzAsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI2NDE5NDA3LCJleHAiOjE3MjY0MjEyMDd9.by8HZTpKra7fSWO7F_WV4yX-9TVSWQTn5Yr5Oj74GKE",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDlhZTUzNjM5YTg3MjM4NDI1YWUzMiIsImZpcnN0X25hbWUiOiJKb3NlIiwibGFzdF9uYW1lIjoiQXJpbWF0ZWEiLCJlbWFpbCI6ImFya2hhbGVtQGdtYWlsLmNvbSIsImFnZSI6ODUsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzI4Njg3Njk5LCJleHAiOjE3NjAyNDUyOTl9.mROAmVxT1CsRM1OF_TaX7N8RFHmv69ZFILeKITLa-_0",
       "type": "default",
       "enabled": true
     }
   ],
   "_postman_variable_scope": "environment",
-  "_postman_exported_at": "2024-09-15T19:35:45.226Z",
-  "_postman_exported_using": "Postman/11.11.1"
+  "_postman_exported_at": "2024-10-12T00:05:22.943Z",
+  "_postman_exported_using": "Postman/11.16.1"
 }

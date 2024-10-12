@@ -14,6 +14,7 @@ import usersRouter from "./routes/user.router.js";
 import productsRouter from "./routes/product.router.js";
 import cartsRouter from "./routes/cart.router.js";
 import ordersRouter from "./routes/order.router.js";
+import emailsRouter from "./routes/email.router.js";
 
 const PORT = appPort || 8080;
 const __dirname = getRoute(import.meta.url);
@@ -40,6 +41,7 @@ app.use("/api/session", usersRouter);
 app.use("/api/product", productsRouter);
 app.use("/api/cart", cartsRouter);
 app.use("/api/order", ordersRouter);
+app.use("/api/email", emailsRouter);
 
 swaggerDocs(app, PORT, __dirname);
 

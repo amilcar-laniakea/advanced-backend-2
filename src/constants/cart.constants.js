@@ -3,6 +3,7 @@ export const cartSuccessCodes = {
   SUCCESS_DELETE: "success delete cart",
   SUCCESS_ADD_PRODUCT: "success add product to cart",
   SUCCESS_DELETE_PRODUCT: "success delete product from cart",
+  SUCCESS_PURCHASE: "the cart has been successfully purchased",
 };
 
 export const cartErrorCodes = {

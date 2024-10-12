@@ -33,5 +33,5 @@
     "Swal",
     "websockets"
   ],
-  "editor.formatOnSave": false
+  "editor.formatOnSave": true
 }

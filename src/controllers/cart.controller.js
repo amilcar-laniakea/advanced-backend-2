@@ -10,6 +10,7 @@ import {
   serviceGetOrders,
 } from "../services/order.service.js";
 import { getUser } from "../services/user.service.js";
+import { sendEmail } from "../services/email.service.js";
 import { Response } from "../utils/response.js";
 import {
   cartSuccessCodes,
@@ -55,7 +56,11 @@ export const createCart = async (req, res) => {
     if (!userData)
       return Response(res, null, userErrorCodes.ERROR_NOT_FOUND, 404, false);
 
-    const checkCart = await serviceGetCart(userData?.cart_id?._id, false, true);
+    let checkCart;
+
+    if (userData?.cart_id?._id) {
+      checkCart = await serviceGetCart(userData?.cart_id?._id, false, true);
+    }
 
     if (checkCart && checkCart._id._id === userData?.cart_id?._id)
       return Response(res, null, cartErrorCodes.ERROR_DUPLICATE, 400, false);
@@ -208,7 +213,7 @@ export const addCartProduct = async (req, res) => {
 
 export const purchaseCart = async (req, res) => {
   try {
-    const { id: idUser } = req.user;
+    const { id: idUser, email, first_name, last_name } = req.user;
     const { id: idCart } = req.params;
 
     const cart = await serviceGetCart(idCart);
@@ -274,9 +279,41 @@ export const purchaseCart = async (req, res) => {
 
     const response = await serviceCreateOrder(order);
 
-    console.log("response", response);
-
     await cart.save();
+
+    const emailSendObject = {
+      emailUser: email,
+      userName: `${first_name} ${last_name}`,
+      orderId: response.id,
+      code: response.code,
+      amount: response.amount,
+      datePurchase: response.createdAt,
+      products: filteredProducts,
+    };
+
+    const html = `
+      <h1>Purchase Confirmation</h1>
+      <p>Thank you for your purchase, ${emailSendObject.userName}!</p>
+      <p>Your purchase has been confirmed with the following details:</p>
+      <p><strong>Order ID:</strong> ${emailSendObject.code}</p>
+      <p><strong>Date:</strong> ${emailSendObject.datePurchase}</p>
+      <p>You have bought ${
+        emailSendObject.products.length
+      } items for a total of <strong>$${emailSendObject.amount}</strong>.</p>
+      <ul>
+        ${emailSendObject.products
+          .map((item) => `<li>${item.name}: $${item.price}</li>`)
+          .join("")}
+      </ul>
+    `;
+
+    const responseEmail = await sendEmail({
+      to: emailSendObject.emailUser,
+      subject: `Purchase confirmation: ${emailSendObject.orderId}`,
+      html,
+    });
+
+    console.log("responseEmail", responseEmail);
 
     if (noStockProducts.length > 0) {
       return Response(
@@ -291,7 +328,13 @@ export const purchaseCart = async (req, res) => {
       );
     }
 
-    return Response(res, filteredProducts, cartSuccessCodes.SUCCESS_PURCHASE);
+    return Response(
+      res,
+      { purchaseId: response.id },
+      cartSuccessCodes.SUCCESS_PURCHASE,
+      200,
+      true
+    );
   } catch (error) {
     if (error.message === cartErrorCodes.INVALID_FORMAT)
       return Response(res, null, error.message, 400, false);

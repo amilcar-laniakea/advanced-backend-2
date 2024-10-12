@@ -8,3 +8,6 @@ export const dbRetryDelay = process.env.MONGO_RETRY_DELAY || 3000;
 export const appSecret = process.env.APP_SECRET;
 export const jwtExpirationTime = process.env.JWT_EXPIRATION_TIME || "1h";
 export const swaggerPath = process.env.SWAGGER_PATH;
+export const emailAddress = process.env.EMAIL_ADDRESS;
+export const emailUserAddress = process.env.EMAIL_USER_ADDRESS;
+export const emailSecretKey = process.env.EMAIL_SECRET_KEY;
