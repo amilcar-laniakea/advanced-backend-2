@@ -1,16 +1,9 @@
-import {
-  serviceGetCarts,
-  serviceGetCart,
-  serviceCreateCart,
-  serviceDeleteCart,
-} from "../services/cart.service.js";
-import { serviceGetProduct } from "../services/product.service.js";
-import {
-  serviceCreateOrder,
-  serviceGetOrders,
-} from "../services/order.service.js";
-import { getUser } from "../services/user.service.js";
-import { sendEmail } from "../services/email.service.js";
+import Cart from "../dao/classes/cart.dao.js";
+import Product from "../dao/classes/product.dao.js";
+import User from "../dao/classes/user.dao.js";
+import Order from "../dao/classes/order.dao.js";
+import Email from "../dao/classes/email.dao.js";
+
 import { Response } from "../utils/response.js";
 import {
   cartSuccessCodes,
@@ -18,15 +11,27 @@ import {
 } from "../constants/cart.constants.js";
 import { productErrorCodes } from "../constants/product.constants.js";
 import { isValidObjectId } from "../utils/is-valid-object-id.js";
+import CartDTO from "../dto/cart.dto.js";
+
+const cartService = new Cart();
+const productService = new Product();
+const userService = new User();
+const orderService = new Order();
+const emailService = new Email();
 
 export const getCarts = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
 
-    const response = await serviceGetCarts(page, limit);
+    const request = await cartService.getCarts(page, limit);
+    const cartDTO = CartDTO.fromMongoDocumentList(request.docs);
 
-    return Response(res, response, cartSuccessCodes.SUCCESS_GET);
+    return Response(
+      res,
+      { ...request, docs: cartDTO },
+      cartSuccessCodes.SUCCESS_GET
+    );
   } catch (error) {
     return Response(res, null, error.message, 500, false);
   }
@@ -34,9 +39,10 @@ export const getCarts = async (req, res) => {
 
 export const getCart = async (req, res) => {
   try {
-    const response = await serviceGetCart(req.params.id, true);
+    const response = await cartService.getCart(req.params.id, true);
+    const cartDTO = CartDTO.fromMongoDocument(response);
 
-    return Response(res, response);
+    return Response(res, cartDTO);
   } catch (error) {
     if (error.message === cartErrorCodes.INVALID_FORMAT)
       return Response(res, null, error.message, 400, false);
@@ -51,7 +57,7 @@ export const createCart = async (req, res) => {
   try {
     const { user } = req;
 
-    const userData = await getUser(user.email);
+    const userData = await userService.getUser(user.email);
 
     if (!userData)
       return Response(res, null, userErrorCodes.ERROR_NOT_FOUND, 404, false);
@@ -59,19 +65,24 @@ export const createCart = async (req, res) => {
     let checkCart;
 
     if (userData?.cart_id?._id) {
-      checkCart = await serviceGetCart(userData?.cart_id?._id, false, true);
+      checkCart = await cartService.getCart(
+        userData?.cart_id?._id,
+        false,
+        true
+      );
     }
 
     if (checkCart && checkCart._id._id === userData?.cart_id?._id)
       return Response(res, null, cartErrorCodes.ERROR_DUPLICATE, 400, false);
 
-    const response = await serviceCreateCart(userData._id);
+    const response = await cartService.createCart(userData._id);
 
     userData.cart_id = response._id;
 
     await userData.save();
+    const cartResponse = CartDTO.fromMongoDocument(response);
 
-    return Response(res, response, cartSuccessCodes.SUCCESS_CREATE);
+    return Response(res, cartResponse, cartSuccessCodes.SUCCESS_CREATE);
   } catch (error) {
     if (error.errorResponse?.code === 11000)
       return Response(res, null, error.message, 400, false);
@@ -81,7 +92,7 @@ export const createCart = async (req, res) => {
 
 export const deleteCart = async (req, res) => {
   try {
-    const response = await serviceDeleteCart(req.params.id);
+    const response = await cartService.deleteCart(req.params.id);
 
     return Response(res, response, cartSuccessCodes.SUCCESS_DELETE);
   } catch (error) {
@@ -101,7 +112,7 @@ export const deleteCartProduct = async (req, res) => {
     if (!isValidObjectId(pid))
       return Response(res, null, productErrorCodes.INVALID_FORMAT, 400, false);
 
-    const cart = await serviceGetCart(cid);
+    const cart = await cartService.getCart(cid);
 
     const productIndex = cart.products.findIndex(
       (prod) => prod.product.toString() === pid
@@ -141,8 +152,8 @@ export const addCartProduct = async (req, res) => {
     if (!isValidObjectId(pid))
       return Response(res, null, productErrorCodes.INVALID_FORMAT, 400, false);
 
-    const cart = await serviceGetCart(cid);
-    const product = await serviceGetProduct(pid);
+    const cart = await cartService.getCart(cid);
+    const product = await productService.getProduct(pid);
 
     if (id !== cart.user.toString())
       return Response(res, null, cartErrorCodes.ERROR_UNAUTHORIZED, 400, false);
@@ -216,7 +227,7 @@ export const purchaseCart = async (req, res) => {
     const { id: idUser, email, first_name, last_name } = req.user;
     const { id: idCart } = req.params;
 
-    const cart = await serviceGetCart(idCart);
+    const cart = await cartService.getCart(idCart);
 
     if (idUser !== cart.user.toString())
       return Response(res, null, cartErrorCodes.ERROR_UNAUTHORIZED, 400, false);
@@ -225,7 +236,7 @@ export const purchaseCart = async (req, res) => {
 
     const products = await Promise.all(
       cart.products.map(async (prod) => {
-        const product = await serviceGetProduct(prod.product);
+        const product = await productService.getProduct(prod.product);
 
         if (product.stock < prod.quantity) {
           noStockProducts.push(product);
@@ -265,7 +276,7 @@ export const purchaseCart = async (req, res) => {
       return existsInFiltered;
     });
 
-    const totalOrders = await serviceGetOrders({ bypassError: true });
+    const totalOrders = await orderService.getOrders({ bypassError: true });
 
     const order = {
       code:
@@ -277,7 +288,7 @@ export const purchaseCart = async (req, res) => {
       user: idUser,
     };
 
-    const response = await serviceCreateOrder(order);
+    const response = await orderService.createOrder(order);
 
     await cart.save();
 
@@ -307,7 +318,7 @@ export const purchaseCart = async (req, res) => {
       </ul>
     `;
 
-    const responseEmail = await sendEmail({
+    const responseEmail = await emailService.sendEmail({
       to: emailSendObject.emailUser,
       subject: `Purchase confirmation: ${emailSendObject.orderId}`,
       html,

@@ -35,9 +35,9 @@ const orderSchema = new Schema(
 
 orderSchema.plugin(mongoosePaginate);
 
-const orderModel = "Order";
-const orderCollection = "orders";
+const modelPointer = "Order";
+const collectionPointer = "orders";
 
-const Order = model(orderModel, orderSchema, orderCollection);
+const orderModel = model(modelPointer, orderSchema, collectionPointer);
 
-export default Order;
+export default orderModel;

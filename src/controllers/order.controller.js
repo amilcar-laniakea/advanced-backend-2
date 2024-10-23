@@ -1,9 +1,10 @@
+import Order from "../dao/classes/order.dao.js";
+
 import { orderErrorCodes } from "../constants/order.constants.js";
 import { Response } from "../utils/response.js";
-import {
-  serviceGetOrders,
-  serviceGetOrder,
-} from "../services/order.service.js";
+import OrderDTO from "../dto/order.dto.js";
+
+const orderService = new Order();
 
 export const getOrders = async (req, res) => {
   try {
@@ -12,14 +13,16 @@ export const getOrders = async (req, res) => {
     const code = parseInt(req.query.code) || null;
     const sort = req.query.sort || "";
 
-    const request = await serviceGetOrders({
+    const request = await orderService.getOrders({
       page,
       limit,
       code,
       sort,
     });
 
-    return Response(res, request);
+    const ordersDTO = OrderDTO.fromMongoDocumentList(request.docs);
+
+    return Response(res, { ...request, docs: ordersDTO });
   } catch (error) {
     if (error.message === orderErrorCodes.NOT_FOUND_ORDER)
       return Response(res, null, error.message, 404, false);
@@ -30,9 +33,10 @@ export const getOrders = async (req, res) => {
 
 export const getOrder = async (req, res) => {
   try {
-    const order = await serviceGetOrder(String(req.params.id));
+    const order = await orderService.getOrder(String(req.params.id));
+    const orderDTO = OrderDTO.fromMongoDocument(order);
 
-    return Response(res, order);
+    return Response(res, orderDTO);
   } catch (error) {
     if (error.message === orderErrorCodes.INVALID_FORMAT)
       return Response(res, null, error.message, 400, false);

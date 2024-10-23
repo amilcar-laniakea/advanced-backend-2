@@ -13,25 +13,9 @@ import {
 
 const router = Router();
 
-router.get(
-  "/", 
-  authenticateJwt(),
-  authenticateRole("admin"),
-  getCarts
-);
-router.get(
-  "/:id", 
-  authenticateJwt(),
-  authenticateRole("admin"),
-  getCart,
-
-);
-router.post(
-  "/", 
-  authenticateJwt(), 
-  authenticateRole("user"),
-  createCart
-);
+router.get("/", authenticateJwt(), authenticateRole("admin"), getCarts);
+router.get("/:id", authenticateJwt(), authenticateRole("admin"), getCart);
+router.post("/", authenticateJwt(), authenticateRole("user"), createCart);
 router.post(
   "/:cid/product/:pid",
   authenticateJwt(),
@@ -44,16 +28,12 @@ router.delete(
   authenticateRole("user"),
   deleteCartProduct
 );
-router.delete(
-  "/:id",
-  authenticateJwt(), 
-  authenticateRole("admin"),
-  deleteCart
-);
+router.delete("/:id", authenticateJwt(), authenticateRole("admin"), deleteCart);
 router.post(
-  "/:id/purchase", 
-  authenticateJwt(), 
-  authenticateRole("user"), 
-  purchaseCart);
+  "/:id/purchase",
+  authenticateJwt(),
+  authenticateRole("user"),
+  purchaseCart
+);
 
 export default router;
