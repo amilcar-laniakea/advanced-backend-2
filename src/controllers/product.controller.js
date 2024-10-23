@@ -3,15 +3,11 @@ import {
   productSuccessCodes,
 } from "../constants/product.constants.js";
 import { exceptionErrors } from "../constants/general.constants.js";
-import {
-  serviceGetProducts,
-  serviceGetProduct,
-  serviceCreateProduct,
-  serviceUpdateProduct,
-  serviceDeleteProduct,
-} from "../services/product.service.js";
-import ProductDTO from "../DTO/product.dto.js";
+import Product from "../dao/classes/product.dao.js";
+import ProductDTO from "../dto/product.dto.js";
 import { Response } from "../utils/response.js";
+
+const productService = new Product();
 
 export const getProducts = async (req, res) => {
   try {
@@ -24,7 +20,7 @@ export const getProducts = async (req, res) => {
     const code = parseInt(req.query.code) || null;
     const sort = req.query.sort || "";
 
-    const request = await serviceGetProducts(
+    const request = await productService.getProducts(
       page,
       limit,
       category,
@@ -35,7 +31,9 @@ export const getProducts = async (req, res) => {
       sort
     );
 
-    return Response(res, request);
+    const productsDTO = ProductDTO.fromMongoDocumentList(request.docs);
+
+    return Response(res, { ...request, docs: productsDTO });
   } catch (error) {
     if (error.message === productErrorCodes.NOT_FOUND)
       return Response(res, null, error.message, 404, false);
@@ -46,9 +44,10 @@ export const getProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
   try {
-    const product = await serviceGetProduct(String(req.params.id));
+    const product = await productService.getProduct(String(req.params.id));
+    const productDTO = ProductDTO.fromMongoDocument(product);
 
-    return Response(res, product);
+    return Response(res, productDTO);
   } catch (error) {
     if (error.message === productErrorCodes.INVALID_FORMAT)
       return Response(res, null, error.message, 400, false);
@@ -64,7 +63,7 @@ export const createProduct = async (req, res) => {
   try {
     const product = new ProductDTO(req.body);
 
-    const response = await serviceCreateProduct(product);
+    const response = await productService.createProduct(product);
 
     return Response(res, response, productSuccessCodes.SUCCESS_CREATE, 201);
   } catch (error) {
@@ -103,14 +102,14 @@ export const updateProduct = async (req, res) => {
       thumbnail,
     };
 
-    const productUpdate = await serviceUpdateProduct(req.params.id, product);
-
-    return Response(
-      res,
-      { ...productUpdate._doc, ...product },
-      productSuccessCodes.SUCCESS_UPDATE,
-      200
+    const productUpdate = await productService.updateProduct(
+      req.params.id,
+      product
     );
+
+    const productDTO = ProductDTO.fromMongoDocument(productUpdate);
+
+    return Response(res, productDTO, productSuccessCodes.SUCCESS_UPDATE, 200);
   } catch (error) {
     if (error.message === productErrorCodes.NOT_FOUND)
       return Response(res, null, error.message, 404, false);
@@ -127,9 +126,11 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const response = await serviceDeleteProduct(req.params.id);
+    const response = await productService.deleteProduct(req.params.id);
 
-    return Response(res, response, productSuccessCodes.SUCCESS_DELETE, 200);
+    const productDTO = ProductDTO.fromMongoDocument(response);
+
+    return Response(res, productDTO, productSuccessCodes.SUCCESS_DELETE, 200);
   } catch (error) {
     if (error.message === productErrorCodes.NOT_FOUND)
       return Response(res, null, error.message, 404, false);

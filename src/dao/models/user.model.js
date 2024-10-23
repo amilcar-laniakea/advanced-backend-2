@@ -42,9 +42,9 @@ const userSchema = new Schema(
 
 userSchema.plugin(mongoosePaginate);
 
-const userModel = "User";
-const userCollection = "users";
+const modelPointer = "User";
+const collectionPointer = "users";
 
-const User = model(userModel, userSchema, userCollection);
+const userModel = model(modelPointer, userSchema, collectionPointer);
 
-export default User;
+export default userModel;

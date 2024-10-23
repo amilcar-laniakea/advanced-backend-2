@@ -1,4 +1,4 @@
-import { getUser, createUser } from "../services/user.service.js";
+import User from "../dao/classes/user.dao.js";
 import {
   userErrorCodes,
   userSuccessCodes,
@@ -7,6 +7,9 @@ import { createHash } from "../utils/create-hash.js";
 import { Response } from "../utils/response.js";
 import { generateJwt } from "../utils/generate-jwt.js";
 import { isValidPassword } from "../utils/is-valid-password.js";
+import UserDTO from "../dto/user.dto.js";
+
+const userService = new User();
 
 export const registerUser = async (req, res) => {
   try {
@@ -34,7 +37,7 @@ export const registerUser = async (req, res) => {
       );
     }
 
-    const user = await getUser(email, true);
+    const user = await userService.getUser(email, true);
 
     if (user) {
       return Response(res, null, userErrorCodes.ERROR_USER_EXISTS, 400, false);
@@ -42,17 +45,10 @@ export const registerUser = async (req, res) => {
 
     const hashedPassword = createHash(password);
 
-    const userData = {
-      first_name,
-      last_name,
-      email,
-      age,
-      role: typeof role === "string" ? role.toLowerCase() : undefined,
-      cart_id,
-    };
+    const userDataDTO = UserDTO.fromRequestBody(req.body);
 
-    const newUser = await createUser({
-      ...userData,
+    const newUser = await userService.createUser({
+      ...userDataDTO,
       password: hashedPassword,
     });
 
@@ -101,22 +97,14 @@ export const loginUser = async (req, res) => {
       );
     }
 
-    const user = await getUser(email);
+    const user = await userService.getUser(email);
     if (!user || !isValidPassword(password, user.password)) {
       return Response(res, null, userErrorCodes.ERROR_CREDENTIALS, 400, false);
     }
 
-    const userData = {
-      id: user._id,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      age: user.age,
-      role: user.role,
-      cart_id: user.cart_id,
-    };
+    const userDataDTO = UserDTO.fromMongoDocument(user);
 
-    const token = generateJwt(userData);
+    const token = generateJwt(userDataDTO.toObject());
 
     return Response(
       res,
@@ -145,7 +133,7 @@ export const currentUser = async (req, res) => {
   try {
     const { user } = req;
 
-    const userData = await getUser(user.email);
+    const userData = await userService.getUser(user.email);
 
     if (!userData) {
       return Response(res, null, userErrorCodes.ERROR_NOT_FOUND, 404, false);
@@ -161,17 +149,7 @@ export const currentUser = async (req, res) => {
       );
     }
 
-    const userResponse = {
-      id: userData._id,
-      first_name: userData.first_name,
-      last_name: userData.last_name,
-      email: userData.email,
-      age: userData.age,
-      role: userData.role,
-      cart_id: userData.cart_id,
-      created_at: userData.createdAt,
-      updated_at: userData.updatedAt,
-    };
+    const userResponse = UserDTO.fromMongoDocument(userData);
 
     return Response(res, userResponse);
   } catch (error) {

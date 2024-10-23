@@ -34,9 +34,9 @@ cartSchema.index({ user: 1 }, { unique: true });
 
 cartSchema.plugin(mongoosePaginate);
 
-const cartModel = "Cart";
-const cartCollection = "carts";
+const modelPointer = "Cart";
+const collectionPointer = "carts";
 
-const Cart = model(cartModel, cartSchema, cartCollection);
+const cartModel = model(modelPointer, cartSchema, collectionPointer);
 
-export default Cart;
+export default cartModel;

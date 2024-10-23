@@ -43,9 +43,9 @@ const productSchema = new Schema(
 
 productSchema.plugin(mongoosePaginate);
 
-const productModel = "Product";
-const productCollection = "products";
+const modelPointer = "Product";
+const collectionPointer = "products";
 
-const Product = model(productModel, productSchema, productCollection);
+const productModel = model(modelPointer, productSchema, collectionPointer);
 
-export default Product;
+export default productModel;

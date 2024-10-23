@@ -1,5 +1,7 @@
-import { sendEmail } from "../services/email.service.js";
+import Email from "../dao/classes/email.dao.js";
 import { Response } from "../utils/response.js";
+
+const emailService = new Email();
 
 export const emailProcess = async (req, res) => {
   try {
@@ -11,7 +13,7 @@ export const emailProcess = async (req, res) => {
       <p>Your name is <strong>${description}</strong>.</p>
     `;
 
-    const response = await sendEmail({
+    const response = await emailService.sendEmail({
       to: emailUser,
       subject: emailSubject,
       html,
