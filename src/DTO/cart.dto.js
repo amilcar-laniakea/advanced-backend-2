@@ -19,4 +19,8 @@ export default class CartDTO {
   static fromMongoDocument(cart) {
     return new CartDTO(cart);
   }
+
+  static fromMongoDocumentList(cartDocs) {
+    return cartDocs.map((cart) => new CartDTO(cart));
+  }
 }

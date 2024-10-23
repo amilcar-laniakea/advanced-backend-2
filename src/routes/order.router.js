@@ -6,11 +6,6 @@ import { getOrders, getOrder } from "../controllers/order.controller.js";
 const router = Router();
 
 router.get("/", authenticateJwt(), authenticateRole("admin"), getOrders);
-router.get(
-  "/:id",
-  authenticateJwt(),
-  // authenticateRole("user"),
-  getOrder
-);
+router.get("/:id", authenticateJwt(), authenticateRole("user"), getOrder);
 
 export default router;

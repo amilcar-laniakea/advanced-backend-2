@@ -11,6 +11,7 @@ import {
 } from "../constants/cart.constants.js";
 import { productErrorCodes } from "../constants/product.constants.js";
 import { isValidObjectId } from "../utils/is-valid-object-id.js";
+import CartDTO from "../dto/cart.dto.js";
 
 const cartService = new Cart();
 const productService = new Product();
@@ -23,9 +24,14 @@ export const getCarts = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
 
-    const response = await cartService.getCarts(page, limit);
+    const request = await cartService.getCarts(page, limit);
+    const cartDTO = CartDTO.fromMongoDocumentList(request.docs);
 
-    return Response(res, response, cartSuccessCodes.SUCCESS_GET);
+    return Response(
+      res,
+      { ...request, docs: cartDTO },
+      cartSuccessCodes.SUCCESS_GET
+    );
   } catch (error) {
     return Response(res, null, error.message, 500, false);
   }
@@ -34,8 +40,9 @@ export const getCarts = async (req, res) => {
 export const getCart = async (req, res) => {
   try {
     const response = await cartService.getCart(req.params.id, true);
+    const cartDTO = CartDTO.fromMongoDocument(response);
 
-    return Response(res, response);
+    return Response(res, cartDTO);
   } catch (error) {
     if (error.message === cartErrorCodes.INVALID_FORMAT)
       return Response(res, null, error.message, 400, false);
@@ -70,13 +77,12 @@ export const createCart = async (req, res) => {
 
     const response = await cartService.createCart(userData._id);
 
-    console.log("userData", userData);
-
     userData.cart_id = response._id;
 
     await userData.save();
+    const cartResponse = CartDTO.fromMongoDocument(response);
 
-    return Response(res, response, cartSuccessCodes.SUCCESS_CREATE);
+    return Response(res, cartResponse, cartSuccessCodes.SUCCESS_CREATE);
   } catch (error) {
     if (error.errorResponse?.code === 11000)
       return Response(res, null, error.message, 400, false);
